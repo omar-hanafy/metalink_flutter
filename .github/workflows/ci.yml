@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-stable:
+    name: Test on stable
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Version channel check
+        if: github.event_name == 'pull_request' && (github.base_ref == 'main' || github.base_ref == 'dev')
+        run: |
+          if git diff --name-only "origin/${{ github.base_ref }}"...HEAD | grep -q '^pubspec.yaml$'; then
+            version=$(awk '/^version:/ {print $2}' pubspec.yaml)
+            if [ "${{ github.base_ref }}" = "main" ]; then
+              if echo "$version" | grep -q '-'; then
+                echo "Main requires a stable version (no pre-release suffix)."
+                exit 1
+              fi
+            else
+              if ! echo "$version" | grep -q '-'; then
+                echo "Dev requires a pre-release version suffix (e.g. -dev.1)."
+                exit 1
+              fi
+            fi
+          else
+            echo "pubspec.yaml not changed; skipping version channel check."
+          fi
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No tests to run."
+          fi
+
+  test-beta:
+    name: Test on beta
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter (beta)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: beta
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No tests to run."
+          fi
+
+  pana:
+    name: Pana
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Install pana
+        run: dart pub global activate pana
+      - name: Install webp tools
+        run: sudo apt-get update && sudo apt-get install -y webp
+      - name: Run pana
+        run: |
+          pana --json > pana.json
+          python3 - <<'PY'
+          import json
+          with open('pana.json') as f:
+            data = json.load(f)
+          scores = data.get('scores', {})
+          granted = scores.get('grantedPoints', 0)
+          max_points = scores.get('maxPoints', 0)
+          if max_points == 0:
+            raise SystemExit('pana did not report scores; failing.')
+          if granted != max_points:
+            raise SystemExit(f'pana score {granted}/{max_points} (full score required).')
+          print(f'pana score {granted}/{max_points}')
+          PY

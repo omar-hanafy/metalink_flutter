@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'link_preview_theme.dart';
-import 'link_preview_theme_data.dart';
+import 'package:metalink_flutter/src/themes/link_preview_theme.dart';
+import 'package:metalink_flutter/src/themes/link_preview_theme_data.dart';
 
 /// Extensions on [BuildContext] to easily access link preview theming
 extension LinkPreviewThemeExtension on BuildContext {
@@ -39,6 +39,18 @@ extension ThemeDataExtensions on ThemeData {
           _FakeContext(this),
           colorScheme,
         );
+  }
+
+  /// Returns a copy of this theme with the link preview theme extension applied.
+  ThemeData withLinkPreviewTheme(LinkPreviewThemeData data) {
+    final existingExtensions =
+        extensions.values.where((ext) => ext is! LinkPreviewTheme);
+    return copyWith(
+      extensions: [
+        ...existingExtensions,
+        LinkPreviewTheme(data: data),
+      ],
+    );
   }
 }
 

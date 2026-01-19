@@ -20,6 +20,8 @@ class LinkPreviewBuilder extends StatefulWidget {
     this.cacheDuration,
     this.forceRefresh = false,
     this.proxyUrl,
+    this.userAgent,
+    this.animateLoading = true,
     this.errorBuilder,
     this.loadingBuilder,
     this.emptyBuilder,
@@ -66,6 +68,12 @@ class LinkPreviewBuilder extends StatefulWidget {
 
   /// Optional CORS proxy URL for web platform
   final String? proxyUrl;
+
+  /// Optional user agent to use when fetching metadata
+  final String? userAgent;
+
+  /// Whether to animate the loading skeleton
+  final bool animateLoading;
 
   /// Builder for handling errors
   final Widget Function(BuildContext context, Object error)? errorBuilder;
@@ -116,6 +124,7 @@ class _LinkPreviewBuilderState extends State<LinkPreviewBuilder> {
           initialUrl: widget.url,
           cacheDuration: widget.cacheDuration ?? const Duration(hours: 24),
           proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
 
         // Check if widget is still mounted before updating state
@@ -132,6 +141,7 @@ class _LinkPreviewBuilderState extends State<LinkPreviewBuilder> {
           provider: widget.provider,
           initialUrl: widget.url,
           proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
 
         if (!mounted) return;
@@ -152,6 +162,7 @@ class _LinkPreviewBuilderState extends State<LinkPreviewBuilder> {
         _controller = LinkPreviewController(
           initialUrl: widget.url,
           proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
         _isLocalController = true;
       });
@@ -192,7 +203,10 @@ class _LinkPreviewBuilderState extends State<LinkPreviewBuilder> {
     // If the controller is still initializing, show loading state
     if (_isInitializing || _controller == null) {
       return widget.loadingBuilder?.call(context) ??
-          LinkPreviewSkeleton(style: widget.style);
+          LinkPreviewSkeleton(
+            style: widget.style,
+            animate: widget.animateLoading,
+          );
     }
 
     return AnimatedBuilder(
@@ -200,7 +214,10 @@ class _LinkPreviewBuilderState extends State<LinkPreviewBuilder> {
       builder: (context, child) {
         if (_controller!.isLoading) {
           return widget.loadingBuilder?.call(context) ??
-              LinkPreviewSkeleton(style: widget.style);
+              LinkPreviewSkeleton(
+                style: widget.style,
+                animate: widget.animateLoading,
+              );
         }
 
         if (_controller!.error != null) {

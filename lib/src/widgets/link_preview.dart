@@ -23,6 +23,10 @@ class LinkPreview extends StatelessWidget {
     this.previewBuilder,
   });
 
+  static const int _defaultMaxLines = 2;
+  static const int _defaultTitleMaxLines = 2;
+  static const int _defaultDescriptionMaxLines = 3;
+
   /// Creates a large style link preview
   factory LinkPreview.large({
     required String url,
@@ -217,17 +221,42 @@ class LinkPreview extends StatelessWidget {
   final Widget Function(BuildContext context, LinkMetadata data)?
       previewBuilder;
 
+  int _resolveTitleMaxLines() {
+    if (config.titleMaxLines == _defaultTitleMaxLines &&
+        config.maxLines != _defaultMaxLines) {
+      return config.maxLines;
+    }
+    return config.titleMaxLines;
+  }
+
+  int _resolveDescriptionMaxLines() {
+    if (config.descriptionMaxLines == _defaultDescriptionMaxLines &&
+        config.maxLines != _defaultMaxLines) {
+      return config.maxLines;
+    }
+    return config.descriptionMaxLines;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final effectiveCacheDuration = cacheDuration ?? config.cacheDuration;
+    final effectiveOnTap = config.enableTap ? onTap : null;
+    final effectiveHandleNavigation =
+        config.enableTap && config.handleNavigation;
+    final effectiveTitleMaxLines = _resolveTitleMaxLines();
+    final effectiveDescriptionMaxLines = _resolveDescriptionMaxLines();
+
     if (previewBuilder != null) {
       return _CustomLinkPreview(
         url: url,
         controller: controller,
         provider: provider,
-        onTap: onTap,
+        onTap: effectiveOnTap,
         useCache: useCache,
-        cacheDuration: cacheDuration,
+        cacheDuration: effectiveCacheDuration,
         forceRefresh: forceRefresh,
+        proxyUrl: config.proxyUrl,
+        userAgent: config.userAgent,
         errorBuilder: errorBuilder,
         loadingBuilder: loadingBuilder,
         emptyBuilder: emptyBuilder,
@@ -240,15 +269,17 @@ class LinkPreview extends StatelessWidget {
       controller: controller,
       provider: provider,
       style: config.style,
-      titleMaxLines: config.titleMaxLines,
-      descriptionMaxLines: config.descriptionMaxLines,
+      titleMaxLines: effectiveTitleMaxLines,
+      descriptionMaxLines: effectiveDescriptionMaxLines,
       showImage: config.showImage,
       showFavicon: config.showFavicon,
       proxyUrl: config.proxyUrl,
-      onTap: onTap,
-      handleNavigation: config.handleNavigation,
+      userAgent: config.userAgent,
+      animateLoading: config.animateLoading,
+      onTap: effectiveOnTap,
+      handleNavigation: effectiveHandleNavigation,
       useCache: useCache,
-      cacheDuration: cacheDuration,
+      cacheDuration: effectiveCacheDuration,
       forceRefresh: forceRefresh,
       errorBuilder: errorBuilder,
       loadingBuilder: loadingBuilder,
@@ -268,6 +299,8 @@ class _CustomLinkPreview extends StatefulWidget {
     this.useCache = true,
     this.cacheDuration,
     this.forceRefresh = false,
+    this.proxyUrl,
+    this.userAgent,
     this.errorBuilder,
     this.loadingBuilder,
     this.emptyBuilder,
@@ -280,6 +313,8 @@ class _CustomLinkPreview extends StatefulWidget {
   final bool useCache;
   final Duration? cacheDuration;
   final bool forceRefresh;
+  final String? proxyUrl;
+  final String? userAgent;
   final Widget Function(BuildContext context, Object error)? errorBuilder;
   final Widget Function(BuildContext context)? loadingBuilder;
   final Widget Function(BuildContext context)? emptyBuilder;
@@ -324,6 +359,8 @@ class _CustomLinkPreviewState extends State<_CustomLinkPreview> {
         final controller = await LinkPreviewController.withCache(
           initialUrl: widget.url,
           cacheDuration: widget.cacheDuration ?? const Duration(hours: 24),
+          proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
 
         // Check if widget is still mounted before updating state
@@ -339,6 +376,8 @@ class _CustomLinkPreviewState extends State<_CustomLinkPreview> {
         final controller = LinkPreviewController(
           provider: widget.provider,
           initialUrl: widget.url,
+          proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
 
         if (!mounted) return;
@@ -358,6 +397,8 @@ class _CustomLinkPreviewState extends State<_CustomLinkPreview> {
         // We'll create a basic controller without cache
         _controller = LinkPreviewController(
           initialUrl: widget.url,
+          proxyUrl: widget.proxyUrl,
+          userAgent: widget.userAgent,
         );
         _isLocalController = true;
       });

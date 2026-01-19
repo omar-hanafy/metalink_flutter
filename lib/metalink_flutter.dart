@@ -27,3 +27,4 @@ export 'src/widgets/link_preview_card.dart';
 export 'src/widgets/link_preview_compact.dart';
 export 'src/widgets/link_preview_large.dart';
 export 'src/widgets/link_preview_skeleton.dart';
+export 'src/widgets/video_preview.dart';

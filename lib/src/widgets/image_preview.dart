@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:metalink/metalink.dart';
 
-import '../themes/link_preview_theme.dart';
+import 'package:metalink_flutter/src/themes/link_preview_theme.dart';
 
-/// A widget that displays an optimized preview image from a URL
+/// A widget that displays a preview image from a URL
 class ImagePreview extends StatelessWidget {
   /// Creates an [ImagePreview] with the given URL and metadata.
   const ImagePreview({
@@ -23,7 +23,7 @@ class ImagePreview extends StatelessWidget {
   final String imageUrl;
 
   /// Optional metadata for the image
-  final ImageMetadata? imageMetadata;
+  final ImageCandidate? imageMetadata;
 
   /// Width of the image
   final double? width;
@@ -52,19 +52,22 @@ class ImagePreview extends StatelessWidget {
     final effectiveBorderRadius = borderRadius ??
         linkPreviewTheme.imageBorderRadius ??
         BorderRadius.circular(8.0);
-
-    // Try to get an optimized image URL if we have metadata
-    final optimizedUrl = _getOptimizedImageUrl();
+    final effectiveLoadingBuilder = loadingBuilder ??
+        linkPreviewTheme.defaultImageLoadingBuilder ??
+        _defaultLoadingBuilder;
+    final effectiveErrorBuilder = errorBuilder ??
+        linkPreviewTheme.defaultImageErrorBuilder ??
+        _defaultErrorBuilder;
 
     return ClipRRect(
       borderRadius: effectiveBorderRadius,
       child: Image.network(
-        optimizedUrl,
+        imageUrl,
         width: width,
         height: height,
         fit: fit,
-        loadingBuilder: loadingBuilder ?? _defaultLoadingBuilder,
-        errorBuilder: errorBuilder ?? _defaultErrorBuilder,
+        loadingBuilder: effectiveLoadingBuilder,
+        errorBuilder: effectiveErrorBuilder,
       ),
     );
   }
@@ -110,24 +113,5 @@ class ImagePreview extends StatelessWidget {
         child: Icon(Icons.broken_image_outlined),
       ),
     );
-  }
-
-  String _getOptimizedImageUrl() {
-    // If we have metadata with manipulation capabilities, try to optimize the image
-    if (imageMetadata != null &&
-        (imageMetadata!.canResizeWidth || imageMetadata!.canResizeHeight)) {
-      // Calculate dimensions based on the widget's size
-      final targetWidth = width?.toInt();
-      final targetHeight = height?.toInt();
-
-      // Generate an optimized URL
-      return imageMetadata!.generateUrl(
-        width: targetWidth,
-        height: targetHeight,
-      );
-    }
-
-    // Otherwise use the original URL
-    return imageUrl;
   }
 }

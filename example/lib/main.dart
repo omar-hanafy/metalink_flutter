@@ -40,10 +40,10 @@ class MetalinkShowcaseApp extends StatelessWidget {
               color: baseTheme.colorScheme.onSurface,
             ),
             descriptionStyle: TextStyle(
-              color: baseTheme.colorScheme.onSurface.addOpacity(0.8),
+              color: baseTheme.colorScheme.onSurface.withValues(alpha: 0.8),
             ),
             siteNameStyle: TextStyle(
-              color: baseTheme.colorScheme.primary.addOpacity(0.8),
+              color: baseTheme.colorScheme.primary.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
               fontSize: 12,
             ),
@@ -53,7 +53,7 @@ class MetalinkShowcaseApp extends StatelessWidget {
             cardShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
-                color: baseTheme.colorScheme.outline.addOpacity(0.2),
+                color: baseTheme.colorScheme.outline.withValues(alpha: 0.2),
               ),
             ),
           ),
@@ -344,7 +344,7 @@ class _ThemeShowcaseState extends State<ThemeShowcase> {
     final customThemeData = LinkPreviewThemeData(
       backgroundColor: _backgroundColor,
       titleStyle: TextStyle(fontWeight: FontWeight.w600, color: _textColor),
-      descriptionStyle: TextStyle(color: _textColor.addOpacity(0.7)),
+      descriptionStyle: TextStyle(color: _textColor.withValues(alpha: 0.7)),
       borderRadius: BorderRadius.circular(_borderRadius),
       elevation: _elevation,
       showImage: _showImage,
@@ -788,7 +788,7 @@ class _ControllerShowcaseState extends State<ControllerShowcase> {
             size: 64,
             color: Theme.of(
               context,
-            ).colorScheme.onSurfaceVariant.addOpacity(0.5),
+            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -796,7 +796,7 @@ class _ControllerShowcaseState extends State<ControllerShowcase> {
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Theme.of(
                 context,
-              ).colorScheme.onSurfaceVariant.addOpacity(0.7),
+              ).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 24),
@@ -949,7 +949,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: colorScheme.outline.addOpacity(0.2)),
+        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -987,7 +987,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                     Text(
                       '@${data.hostname.split('.').first}',
                       style: TextStyle(
-                        color: colorScheme.onSurface.addOpacity(0.6),
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
                         fontSize: 14,
                       ),
                     ),
@@ -1063,7 +1063,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.addOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -1146,7 +1146,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                     data.description!,
                     style: TextStyle(
                       fontSize: 14,
-                      color: colorScheme.onSurface.addOpacity(0.7),
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -1189,7 +1189,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outline.addOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1235,7 +1235,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                     Text(
                       '• 2 hours ago',
                       style: TextStyle(
-                        color: colorScheme.onSurface.addOpacity(0.6),
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
                         fontSize: 12,
                       ),
                     ),
@@ -1256,7 +1256,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                     data.description!,
                     style: TextStyle(
                       fontSize: 14,
-                      color: colorScheme.onSurface.addOpacity(0.8),
+                      color: colorScheme.onSurface.withValues(alpha: 0.8),
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -1312,7 +1312,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline.addOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1336,7 +1336,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: colorScheme.surface.addOpacity(0.8),
+                      color: colorScheme.surface.withValues(alpha: 0.8),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -1354,7 +1354,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.addOpacity(0.7),
+                        color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
@@ -1411,7 +1411,7 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                       data.siteName ?? data.hostname,
                       style: TextStyle(
                         fontSize: 14,
-                        color: colorScheme.onSurface.addOpacity(0.8),
+                        color: colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
                     const Spacer(),
@@ -1420,14 +1420,14 @@ class _CustomPreviewShowcaseState extends State<CustomPreviewShowcase> {
                         Icon(
                           Icons.visibility,
                           size: 16,
-                          color: colorScheme.onSurface.addOpacity(0.6),
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '5.2K views',
                           style: TextStyle(
                             fontSize: 12,
-                            color: colorScheme.onSurface.addOpacity(0.6),
+                            color: colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ],

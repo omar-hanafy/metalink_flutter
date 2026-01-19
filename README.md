@@ -20,7 +20,7 @@
 - 🔗 **Rich link previews** with images, favicon, title, and description
 - 🎨 **Multiple styles**: Card, Compact, Large, and custom
 - 🎭 **Fully themeable** with Material 3 integration
-- 🔄 **Smart image optimization** and responsive sizing
+- 🖼️ **Image candidate helpers** for selection and display
 - 💾 **Built-in caching** for faster loading
 - 👆 **Tap handling** with URL launching or custom callbacks
 - 🚧 **Loading skeleton placeholders** with shimmer effects
@@ -166,7 +166,7 @@ LinkPreview(
     animateLoading: true,
     cacheDuration: Duration(hours: 24),
   ),
-  onTap: () {
+  onTap: (data) {
     print('Link tapped!');
   },
 )
@@ -289,7 +289,7 @@ final myTheme = ThemeData.light().copyWith(
         faviconSize: 16.0,
         cardShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+          side: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
         ),
       ),
     ),
@@ -339,9 +339,9 @@ for (final match in urls) {
 The `MetadataProvider` class handles caching and fetching metadata:
 
 ```dart
-final provider = MetadataProvider(
+// Create a provider with caching enabled
+final provider = await MetadataProvider.createWithCache(
   cacheDuration: Duration(hours: 24),
-  enableCache: true,
 );
 
 // Get metadata for a URL
@@ -354,8 +354,11 @@ final metadataList = await provider.getMultipleMetadata([
   'https://material.io',
 ]);
 
-// Clear the cache
-await provider.clearCache();
+// Clear the memory cache
+provider.clearMemoryCache();
+
+// Clear the storage cache
+await MetadataProvider.clearStorageCache();
 ```
 
 ## Web Platform Limitations
@@ -372,12 +375,11 @@ To work around this limitation, consider the following options:
 ### Main Classes
 
 - `LinkPreview` - The main widget for displaying link previews
-- `LinkPreviewData` - UI-specific data model for link previews
 - `LinkPreviewController` - Controls the state of link previews
 - `MetadataProvider` - Handles caching and fetching metadata
 - `LinkPreviewTheme` - Theme extension for customizing appearance
 - `UrlDetector` - Utility for finding and analyzing URLs in text
-- `ImageResolver` - Utility for optimizing images
+- `ImageResolver` - Utility for selecting image candidates
 
 For complete API documentation, please see the [API reference](https://pub.dev/documentation/metalink_flutter/latest/).
 
@@ -395,6 +397,10 @@ server to fetch the metadata and relay it to your app. See "Web Platform Limitat
 **Q: How is caching handled?**  
 A: The package caches metadata in memory and optionally on disk using `hive_ce`. You can configure the cache duration
 and clear the cache programmatically.
+
+**Q: Does it resize or optimize images?**  
+A: In v2, MetaLink does not provide image resizing. The Flutter widgets use the original image URLs. If you need resizing,
+use an image proxy or CDN.
 
 **Q: Does it support RTL languages?**  
 A: Yes, the package uses Flutter's logical directional properties (`start`/`end` instead of `left`/`right`) for proper

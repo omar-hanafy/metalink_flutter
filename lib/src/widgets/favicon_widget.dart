@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// A widget that displays a website's favicon
 class FaviconWidget extends StatelessWidget {
@@ -61,13 +60,13 @@ class FaviconWidget extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: backgroundColor ?? colorScheme.primary.addOpacity(0.1),
+        color: backgroundColor ?? colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: borderRadius ?? BorderRadius.circular(size / 4),
       ),
       child: Icon(
         placeholderIcon ?? Icons.language,
         size: size * 0.6,
-        color: colorScheme.primary.addOpacity(0.6),
+        color: colorScheme.primary.withValues(alpha: 0.6),
       ),
     );
   }
@@ -83,13 +82,13 @@ class FaviconWidget extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: backgroundColor ?? colorScheme.primary.addOpacity(0.1),
+        color: backgroundColor ?? colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: borderRadius ?? BorderRadius.circular(size / 4),
       ),
       child: Icon(
         placeholderIcon ?? Icons.language,
         size: size * 0.6,
-        color: colorScheme.primary.addOpacity(0.6),
+        color: colorScheme.primary.withValues(alpha: 0.6),
       ),
     );
   }

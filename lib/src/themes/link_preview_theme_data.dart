@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// Defines the visual properties for link preview widgets.
 ///
@@ -84,13 +83,13 @@ class LinkPreviewThemeData with Diagnosticable {
         fontWeight: FontWeight.w600,
       ),
       descriptionStyle: textTheme.bodyMedium?.copyWith(
-        color: colorScheme.onSurface.addOpacity(0.7),
+        color: colorScheme.onSurface.withValues(alpha: 0.7),
       ),
       urlStyle: textTheme.bodySmall?.copyWith(
         color: colorScheme.primary,
       ),
       siteNameStyle: textTheme.labelMedium?.copyWith(
-        color: colorScheme.onSurface.addOpacity(0.6),
+        color: colorScheme.onSurface.withValues(alpha: 0.6),
       ),
       borderRadius: BorderRadiusDirectional.circular(12.0),
       elevation: 0.0,
@@ -105,7 +104,7 @@ class LinkPreviewThemeData with Diagnosticable {
       contentPadding: const EdgeInsets.all(12.0),
       cardShape: RoundedRectangleBorder(
         borderRadius: BorderRadiusDirectional.circular(12.0),
-        side: BorderSide(color: colorScheme.outline.addOpacity(0.2)),
+        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       showFavicon: true,
       showImage: true,

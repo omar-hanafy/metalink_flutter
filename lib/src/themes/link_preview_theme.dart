@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'link_preview_theme_data.dart';
+import 'package:metalink_flutter/src/themes/link_preview_theme_data.dart';
 
 /// A theme extension for customizing link preview styles throughout an app
 class LinkPreviewTheme extends ThemeExtension<LinkPreviewTheme> {
