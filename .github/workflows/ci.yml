@@ -91,6 +91,8 @@ jobs:
         run: flutter pub get
       - name: Install pana
         run: dart pub global activate pana
+      - name: Install webp tools
+        run: sudo apt-get update && sudo apt-get install -y webp
       - name: Run pana
         run: |
           pana --json > pana.json
