@@ -74,7 +74,7 @@ class VideoPreview extends StatelessWidget {
       shape: themeData.cardShape ??
           RoundedRectangleBorder(
             borderRadius: borderRadius,
-            side: BorderSide(color: colorScheme.outline.addOpacity(0.2)),
+            side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
           ),
       clipBehavior: Clip.antiAlias,
       color: themeData.backgroundColor ?? colorScheme.surface,
@@ -155,7 +155,7 @@ class VideoPreview extends StatelessWidget {
                           style: themeData.siteNameStyle ??
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color:
-                                        colorScheme.onSurface.addOpacity(0.6),
+                                        colorScheme.onSurface.withValues(alpha: 0.6),
                                   ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -177,11 +177,11 @@ class VideoPreview extends StatelessWidget {
       width: playButtonSize,
       height: playButtonSize,
       decoration: BoxDecoration(
-        color: colorScheme.surface.addOpacity(0.85),
+        color: colorScheme.surface.withValues(alpha: 0.85),
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.addOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 8.0,
             offset: const Offset(0, 2),
           ),

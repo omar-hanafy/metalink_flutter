@@ -84,7 +84,7 @@ class _CardSkeleton extends StatelessWidget {
         color: themeData.backgroundColor ?? colorScheme.surface,
         borderRadius: themeData.borderRadius ?? BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.addOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -166,7 +166,7 @@ class _CardSkeleton extends StatelessWidget {
   }
 
   Color _shimmerColor(ColorScheme colorScheme) {
-    return colorScheme.surfaceContainerHighest.addOpacity(0.5);
+    return colorScheme.surfaceContainerHighest.withValues(alpha: 0.5);
   }
 }
 
@@ -198,7 +198,7 @@ class _CompactSkeleton extends StatelessWidget {
         color: themeData.backgroundColor ?? colorScheme.surface,
         borderRadius: themeData.borderRadius ?? BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.addOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       padding: themeData.padding ?? const EdgeInsets.all(8),
@@ -291,7 +291,7 @@ class _LargeSkeleton extends StatelessWidget {
         color: themeData.backgroundColor ?? colorScheme.surface,
         borderRadius: themeData.borderRadius ?? BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.addOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -389,7 +389,7 @@ class _LargeSkeleton extends StatelessWidget {
   }
 
   Color _shimmerColor(ColorScheme colorScheme) {
-    return colorScheme.surfaceContainerHighest.addOpacity(0.5);
+    return colorScheme.surfaceContainerHighest.withValues(alpha: 0.5);
   }
 }
 
@@ -447,7 +447,7 @@ class _SkeletonBoxState extends State<_SkeletonBox>
         height: widget.height,
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius,
-          color: colorScheme.surfaceContainerHighest.addOpacity(0.5),
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         ),
       );
     }
@@ -464,9 +464,9 @@ class _SkeletonBoxState extends State<_SkeletonBox>
               begin: AlignmentDirectional.centerStart,
               end: AlignmentDirectional.centerEnd,
               colors: [
-                colorScheme.surfaceContainerHighest.addOpacity(0.3),
-                colorScheme.surfaceContainerHighest.addOpacity(0.6),
-                colorScheme.surfaceContainerHighest.addOpacity(0.3),
+                colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+                colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               ],
               stops: [
                 _clamp(_animation.value - 0.3),

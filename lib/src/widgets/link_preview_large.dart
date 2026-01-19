@@ -51,7 +51,7 @@ class LinkPreviewLarge extends StatelessWidget {
       shape: themeData.cardShape ??
           RoundedRectangleBorder(
             borderRadius: borderRadius,
-            side: BorderSide(color: colorScheme.outline.addOpacity(0.2)),
+            side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
           ),
       clipBehavior: Clip.antiAlias,
       color: themeData.backgroundColor ?? colorScheme.surface,
@@ -104,7 +104,7 @@ class LinkPreviewLarge extends StatelessWidget {
                             style: themeData.siteNameStyle ??
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color:
-                                          colorScheme.onSurface.addOpacity(0.6),
+                                          colorScheme.onSurface.withValues(alpha: 0.6),
                                       fontWeight: FontWeight.w500,
                                     ),
                             maxLines: 1,
@@ -138,7 +138,7 @@ class LinkPreviewLarge extends StatelessWidget {
                       data.description!,
                       style: themeData.descriptionStyle ??
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.addOpacity(0.7),
+                                color: colorScheme.onSurface.withValues(alpha: 0.7),
                               ),
                       maxLines: descriptionMaxLines,
                       overflow: TextOverflow.ellipsis,

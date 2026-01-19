@@ -289,7 +289,7 @@ final myTheme = ThemeData.light().copyWith(
         faviconSize: 16.0,
         cardShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+          side: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
         ),
       ),
     ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:metalink_flutter/metalink_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,7 +51,7 @@ class LinkPreviewCompact extends StatelessWidget {
       decoration: BoxDecoration(
         color: themeData.backgroundColor ?? colorScheme.surface,
         borderRadius: borderRadius,
-        border: Border.all(color: colorScheme.outline.addOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Material(
@@ -110,7 +109,7 @@ class LinkPreviewCompact extends StatelessWidget {
                             style: themeData.descriptionStyle ??
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color:
-                                          colorScheme.onSurface.addOpacity(0.7),
+                                          colorScheme.onSurface.withValues(alpha: 0.7),
                                     ),
                             maxLines: descriptionMaxLines,
                             overflow: TextOverflow.ellipsis,
@@ -140,7 +139,7 @@ class LinkPreviewCompact extends StatelessWidget {
                                         .labelSmall
                                         ?.copyWith(
                                           color: colorScheme.onSurface
-                                              .addOpacity(0.6),
+                                              .withValues(alpha: 0.6),
                                         ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
