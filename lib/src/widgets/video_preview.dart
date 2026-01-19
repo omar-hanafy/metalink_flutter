@@ -154,8 +154,8 @@ class VideoPreview extends StatelessWidget {
                           data.siteName ?? data.hostname,
                           style: themeData.siteNameStyle ??
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color:
-                                        colorScheme.onSurface.withValues(alpha: 0.6),
+                                    color: colorScheme.onSurface
+                                        .withValues(alpha: 0.6),
                                   ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

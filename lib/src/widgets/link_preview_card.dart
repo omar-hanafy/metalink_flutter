@@ -103,7 +103,8 @@ class LinkPreviewCard extends StatelessWidget {
                       data.description!,
                       style: themeData.descriptionStyle ??
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withValues(alpha: 0.7),
+                                color: colorScheme.onSurface
+                                    .withValues(alpha: 0.7),
                               ),
                       maxLines: descriptionMaxLines,
                       overflow: TextOverflow.ellipsis,
@@ -127,8 +128,8 @@ class LinkPreviewCard extends StatelessWidget {
                           data.siteName ?? data.hostname,
                           style: themeData.siteNameStyle ??
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color:
-                                        colorScheme.onSurface.withValues(alpha: 0.6),
+                                    color: colorScheme.onSurface
+                                        .withValues(alpha: 0.6),
                                   ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

@@ -47,7 +47,12 @@ jobs:
       - name: Analyze
         run: flutter analyze
       - name: Test
-        run: flutter test
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No tests to run."
+          fi
 
   test-beta:
     name: Test on beta
@@ -65,7 +70,12 @@ jobs:
       - name: Analyze
         run: flutter analyze
       - name: Test
-        run: flutter test
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No tests to run."
+          fi
 
   pana:
     name: Pana
