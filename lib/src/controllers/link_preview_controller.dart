@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:metalink/metalink.dart';
 
-import 'metadata_provider.dart';
+import 'package:metalink_flutter/src/controllers/metadata_provider.dart';
+import 'package:metalink_flutter/src/extensions/link_metadata_extensions.dart';
 
 /// Controller for managing link preview state and data loading
 class LinkPreviewController extends ChangeNotifier {
@@ -17,12 +16,14 @@ class LinkPreviewController extends ChangeNotifier {
     String? initialUrl,
     http.Client? client,
     String? proxyUrl,
+    String? userAgent,
   }) {
     return LinkPreviewController._(
       provider: provider ??
           MetadataProvider.create(
             client: client,
             proxyUrl: proxyUrl,
+            userAgent: userAgent,
           ),
       initialUrl: initialUrl,
     );
@@ -48,11 +49,13 @@ class LinkPreviewController extends ChangeNotifier {
     Duration cacheDuration = const Duration(hours: 24),
     http.Client? client,
     String? proxyUrl,
+    String? userAgent,
   }) async {
     final provider = await MetadataProvider.createWithCache(
       cacheDuration: cacheDuration,
       client: client,
       proxyUrl: proxyUrl,
+      userAgent: userAgent,
     );
     return LinkPreviewController._(
       provider: provider,
@@ -119,7 +122,7 @@ class LinkPreviewController extends ChangeNotifier {
       _isLoading = false;
       _error = null;
     } catch (e, s) {
-      log('fetchData error', error: e, stackTrace: s);
+      debugPrint('fetchData error: $e\n$s');
       _isLoading = false;
       _error = e;
       _data = null;

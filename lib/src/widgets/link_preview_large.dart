@@ -60,7 +60,7 @@ class LinkPreviewLarge extends StatelessWidget {
         onTap: () => onTap != null
             ? onTap?.call(data)
             : handleNavigation
-                ? _launchUrl(data.originalUrl)
+                ? _launchUrl(data.originalUrl.toString())
                 : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

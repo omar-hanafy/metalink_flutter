@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:metalink_flutter/metalink_flutter.dart';
 
+/// The entry point for the MetaLink showcase application.
+///
+/// This function:
+/// 1. Initializes the Flutter binding.
+/// 2. Clears the [MetadataProvider] cache to ensure fresh data fetching for demonstration purposes.
+/// 3. Launches the [LinkPreviewShowcase] widget.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Clear cache to demonstrate fresh fetching behavior on every run.
   await MetadataProvider.clearStorageCache();
   runApp(
     const MaterialApp(
@@ -13,7 +20,17 @@ Future<void> main() async {
   );
 }
 
+/// A gallery widget demonstrating the various rendering styles of [LinkPreview].
+///
+/// This widget renders a horizontally scrolling list containing:
+/// *   [LinkPreview.card] - The default card layout.
+/// *   [LinkPreview.compact] - A smaller, row-based layout.
+/// *   [LinkPreview.large] - A prominent layout with large media.
+/// *   [LinkPreview.custom] - Fully custom layouts using the builder pattern.
+///
+/// Use this to visually verify how [LinkMetadata] is parsed and displayed across different styles.
 class LinkPreviewShowcase extends StatelessWidget {
+  /// Creates a [LinkPreviewShowcase] demonstration widget.
   const LinkPreviewShowcase({super.key});
 
   @override
@@ -31,6 +48,7 @@ class LinkPreviewShowcase extends StatelessWidget {
               url: 'https://pub.dev',
               context,
               'Card Style',
+              // Standard card layout for general usage.
               LinkPreview.card(url: 'https://pub.dev', handleNavigation: false),
             ),
             const SizedBox(width: 24),
@@ -38,6 +56,7 @@ class LinkPreviewShowcase extends StatelessWidget {
               context,
               url: 'https://pub.dev',
               'Compact Style',
+              // Compact layout suitable for lists or dense UIs.
               LinkPreview.compact(
                 url: 'https://pub.dev',
                 handleNavigation: false,
@@ -48,6 +67,7 @@ class LinkPreviewShowcase extends StatelessWidget {
               context,
               url: 'https://github.com',
               'Large Style',
+              // Large layout emphasizing the open-graph image.
               LinkPreview.large(
                 url: 'https://github.com',
                 handleNavigation: false,
@@ -58,10 +78,11 @@ class LinkPreviewShowcase extends StatelessWidget {
               context,
               url: 'https://developer.apple.com',
               'Image Only',
+              // Demonstrating a custom builder that only shows the image.
               LinkPreview.custom(
                 url: 'https://developer.apple.com',
                 builder: (context, data) {
-                  final imageUrl = data.imageMetadata?.imageUrl;
+                  final imageUrl = data.imageMetadata?.url.toString();
                   if (imageUrl == null) {
                     return SizedBox.square(
                       dimension: 50,
@@ -77,6 +98,7 @@ class LinkPreviewShowcase extends StatelessWidget {
               context,
               url: 'https://developer.android.com',
               'Custom Style',
+              // A complex custom layout implementing a completely bespoke design system.
               LinkPreview.custom(
                 url: 'https://developer.android.com',
 
@@ -190,6 +212,10 @@ class LinkPreviewShowcase extends StatelessWidget {
     );
   }
 
+  // Encapsulates the layout logic for a single preview section.
+  //
+  // We use a fixed width constraint to ensure all examples align neatly in the horizontal list,
+  // making visual comparison easier.
   Widget _buildPreviewSection(
     BuildContext context,
     String title,
@@ -204,6 +230,7 @@ class LinkPreviewShowcase extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Display the raw URL for reference.
           Text(url),
           Padding(
             padding: const EdgeInsetsDirectional.only(

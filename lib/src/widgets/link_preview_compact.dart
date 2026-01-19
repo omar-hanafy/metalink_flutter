@@ -61,7 +61,7 @@ class LinkPreviewCompact extends StatelessWidget {
           onTap: () => onTap != null
               ? onTap?.call(data)
               : handleNavigation
-                  ? _launchUrl(data.originalUrl)
+                  ? _launchUrl(data.originalUrl.toString())
                   : null,
           child: Padding(
             padding: themeData.padding ?? const EdgeInsets.all(8),

@@ -1,6 +1,6 @@
 name: metalink_flutter
 description: Flutter UI components for link previews using the MetaLink package
-version: 1.0.2
+version: 2.0.0
 repository: https://github.com/omar-hanafy/metalink_flutter
 topics:
   - link-preview
@@ -10,27 +10,23 @@ topics:
   - metadata
 
 environment:
-  sdk: ^3.0.0
-  flutter: ^3.29.0
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.29.0"
 
 dependencies:
+  equatable: ^2.0.8
   flutter:
     sdk: flutter
-  
-  # Core link extraction
-  metalink: ^1.0.4
-  
-  # Required utilities
-  url_launcher: ^6.3.1
-  equatable: ^2.0.7
   flutter_helper_utils: ">=7.0.1 <9.0.0"
-  hive_ce_flutter: ^2.2.0
-  http: ^1.3.0
+  hive_ce_flutter: ^2.3.4
+  http: ^1.6.0
+  metalink: ^2.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
+  flutter_lints: 6.0.0
   flutter_test:
     sdk: flutter
-  very_good_analysis: 7.0.0
 
 flutter:
   uses-material-design: true

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-import '../models/link_preview_style.dart';
-import '../themes/link_preview_theme.dart';
+import 'package:metalink_flutter/src/models/link_preview_style.dart';
+import 'package:metalink_flutter/src/themes/link_preview_theme.dart';
 
 /// A skeleton loading placeholder for link previews
 class LinkPreviewSkeleton extends StatelessWidget {

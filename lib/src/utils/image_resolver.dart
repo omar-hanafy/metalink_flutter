@@ -1,85 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:metalink/metalink.dart';
 
-/// A utility class for resolving and optimizing images from [ImageMetadata]
+/// A utility class for resolving image candidates from [ImageCandidate]
 class ImageResolver {
-  /// Generates an optimized image URL based on the provided constraints
+  /// Returns an image URL based on the provided constraints.
+  ///
+  /// Note: resizing is not supported in metalink v2, so constraints are ignored.
   static String? optimizeImageUrl(
-    ImageMetadata? metadata, {
+    ImageCandidate? metadata, {
     double? width,
     double? height,
     int? quality,
     BoxFit fit = BoxFit.cover,
   }) {
-    if (metadata == null || metadata.imageUrl.isEmpty) {
+    if (metadata == null) {
       return null;
     }
 
-    // Check if the image supports manipulation
-    if (!metadata.canResizeWidth && !metadata.canResizeHeight) {
-      return metadata.imageUrl;
-    }
-
-    // Convert double dimensions to int if provided
-    final intWidth = width?.toInt();
-    final intHeight = height?.toInt();
-
-    // Calculate missing dimension if aspect ratio is available
-    var calculatedWidth = intWidth;
-    var calculatedHeight = intHeight;
-
-    if (metadata.aspectRatio != null) {
-      if (intWidth != null && intHeight == null) {
-        calculatedHeight = (intWidth / metadata.aspectRatio!).round();
-      } else if (intWidth == null && intHeight != null) {
-        calculatedWidth = (intHeight * metadata.aspectRatio!).round();
-      }
-    }
-
-    // Generate the URL with the resolved dimensions
-    return metadata.generateUrl(
-      width: calculatedWidth,
-      height: calculatedHeight,
-      quality: quality,
-    );
+    return metadata.url.toString();
   }
 
   /// Creates a set of responsive image URLs for different device sizes
   static List<ResponsiveImage> generateResponsiveImages(
-    ImageMetadata metadata, {
+    ImageCandidate metadata, {
     List<ResponsiveBreakpoint>? breakpoints,
   }) {
-    final effectiveBreakpoints = breakpoints ?? defaultBreakpoints;
-    final result = <ResponsiveImage>[];
-
-    // Skip if no manipulation is possible
-    if (!metadata.canResizeWidth && !metadata.canResizeHeight) {
-      return [
-        ResponsiveImage(
-          url: metadata.imageUrl,
-          width: metadata.width,
-          height: metadata.height,
-          breakpoint: null,
-        ),
-      ];
-    }
-
-    // Generate an image for each breakpoint
-    for (final breakpoint in effectiveBreakpoints) {
-      final url = metadata.generateUrl(
-        width: breakpoint.width,
-        height: breakpoint.height,
-      );
-
-      result.add(ResponsiveImage(
-        url: url,
-        width: breakpoint.width,
-        height: breakpoint.height,
-        breakpoint: breakpoint,
-      ));
-    }
-
-    return result;
+    // Resizing is not supported in v2, so return the original image
+    return [
+      ResponsiveImage(
+        url: metadata.url.toString(),
+        width: metadata.width,
+        height: metadata.height,
+        breakpoint: null,
+      ),
+    ];
   }
 
   /// Default responsive breakpoints
