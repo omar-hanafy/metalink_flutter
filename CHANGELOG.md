@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.1
+
+- CHORE: Align publish workflow with Trusted Publisher OIDC.
+
 ## 2.0.0
 
 - **BREAKING**: Migrated to `metalink` v2.0.0.

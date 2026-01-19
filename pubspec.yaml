@@ -1,6 +1,6 @@
 name: metalink_flutter
 description: Flutter UI components for link previews using the MetaLink package
-version: 2.0.0
+version: 2.0.1
 repository: https://github.com/omar-hanafy/metalink_flutter
 topics:
   - link-preview
