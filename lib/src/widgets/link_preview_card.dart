@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:metalink_flutter/metalink_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,6 +41,7 @@ class LinkPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = LinkPreviewTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final directionality = Directionality.of(context);
 
     // Default border radius from theme or fallback
     final borderRadius =
@@ -74,9 +74,8 @@ class LinkPreviewCard extends StatelessWidget {
                 height: themeData.imageHeight ?? 150.0,
                 width: double.infinity,
                 borderRadius: BorderRadius.only(
-                  topRight:
-                      borderRadius.resolve(context.directionality).topRight,
-                  topLeft: borderRadius.resolve(context.directionality).topLeft,
+                  topRight: borderRadius.resolve(directionality).topRight,
+                  topLeft: borderRadius.resolve(directionality).topLeft,
                 ),
               ),
             Padding(

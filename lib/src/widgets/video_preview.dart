@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:metalink_flutter/metalink_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,6 +64,7 @@ class VideoPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = LinkPreviewTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final directionality = Directionality.of(context);
 
     final borderRadius =
         themeData.borderRadius ?? BorderRadiusDirectional.circular(12.0);
@@ -92,9 +92,8 @@ class VideoPreview extends StatelessWidget {
             if (showImage && data.hasImage)
               ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: borderRadius.resolve(context.directionality).topLeft,
-                  topRight:
-                      borderRadius.resolve(context.directionality).topRight,
+                  topLeft: borderRadius.resolve(directionality).topLeft,
+                  topRight: borderRadius.resolve(directionality).topRight,
                 ),
                 child: Stack(
                   alignment: Alignment.center,

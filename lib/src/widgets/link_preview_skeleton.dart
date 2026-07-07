@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
-
 import 'package:metalink_flutter/src/models/link_preview_style.dart';
 import 'package:metalink_flutter/src/themes/link_preview_theme.dart';
 
@@ -73,6 +71,7 @@ class _CardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = LinkPreviewTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final directionality = Directionality.of(context);
 
     return Container(
       width: width ?? double.infinity,
@@ -97,12 +96,11 @@ class _CardSkeleton extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: themeData.borderRadius
-                          ?.resolve(context.directionality)
-                          .topLeft ??
-                      const Radius.circular(12),
+                  topLeft:
+                      themeData.borderRadius?.resolve(directionality).topLeft ??
+                          const Radius.circular(12),
                   topRight: themeData.borderRadius
-                          ?.resolve(context.directionality)
+                          ?.resolve(directionality)
                           .topRight ??
                       const Radius.circular(12),
                 ),
@@ -280,6 +278,7 @@ class _LargeSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = LinkPreviewTheme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final directionality = Directionality.of(context);
 
     return Container(
       width: width ?? double.infinity,
@@ -306,12 +305,11 @@ class _LargeSkeleton extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: themeData.borderRadius
-                          ?.resolve(context.directionality)
-                          .topLeft ??
-                      const Radius.circular(12),
+                  topLeft:
+                      themeData.borderRadius?.resolve(directionality).topLeft ??
+                          const Radius.circular(12),
                   topRight: themeData.borderRadius
-                          ?.resolve(context.directionality)
+                          ?.resolve(directionality)
                           .topRight ??
                       const Radius.circular(12),
                 ),

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.2
+
+- Removed the `flutter_helper_utils` dependency; the package now relies only on native Flutter APIs, reducing its dependency footprint.
+
 ## 2.0.1
 
 - CHORE: Align publish workflow with Trusted Publisher OIDC.
