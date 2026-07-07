@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:metalink/metalink.dart';
-
 import 'package:metalink_flutter/src/controllers/metadata_provider.dart';
 import 'package:metalink_flutter/src/extensions/link_metadata_extensions.dart';
 
@@ -111,7 +109,7 @@ class LinkPreviewController extends ChangeNotifier {
 
   /// Fetches preview data for the current URL
   Future<void> fetchData({bool forceRefresh = false}) async {
-    if (_url.isEmptyOrNull) return;
+    if (_url?.isEmpty ?? true) return;
 
     _isLoading = true;
     _error = null;
