@@ -1,420 +1,272 @@
-<h1 align="center">MetaLink Flutter</h1>
+# MetaLink Flutter
 
-<p align="center">
-  <a href="https://pub.dev/packages/metalink_flutter"><img src="https://img.shields.io/pub/v/metalink_flutter.svg" alt="Pub"></a>
-  <a href="https://github.com/omar-hanafy/metalink_flutter/stargazers"><img src="https://img.shields.io/github/stars/omar-hanafy/metalink_flutter" alt="Stars"></a>
-  <a href="https://github.com/omar-hanafy/metalink_flutter/blob/main/LICENSE"><img src="https://img.shields.io/github/license/omar-hanafy/metalink_flutter" alt="License"></a>
-  <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Platform-Flutter-02569B?logo=flutter" alt="Platform"></a>
-</p>
+[![Discontinued](https://img.shields.io/badge/status-discontinued-orange.svg)](https://pub.dev/packages/metalink_flutter)
+[![Replacement: metalink](https://img.shields.io/badge/replacement-metalink-blue.svg)](https://pub.dev/packages/metalink)
+[![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](LICENSE)
 
-<p align="center">
-  A Flutter package for beautiful, highly customizable link preview widgets, built on top of the <a href="https://pub.dev/packages/metalink">MetaLink</a> package.
-</p>
+> [!IMPORTANT]
+> **This package is discontinued.** Version `2.0.3` is the final compatibility
+> release. Existing versions remain available, but no new features or fixes are
+> planned. New and existing applications should use
+> [`package:metalink`](https://pub.dev/packages/metalink) directly and render
+> metadata with their own Flutter widgets.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/metalink_flutter/refs/heads/main/screenshots/cover.png" width="100%" alt="Cover">
-</p>
+MetaLink Flutter provided Material link-preview cards on top of the MetaLink
+metadata engine. The package is being retired so that MetaLink can remain
+focused on reliable extraction, parsing, ranking, diagnostics, networking, and
+caching without owning an application-specific UI layer.
 
-## ✨ Features
+## Why the package was discontinued
 
-- 🔗 **Rich link previews** with images, favicon, title, and description
-- 🎨 **Multiple styles**: Card, Compact, Large, and custom
-- 🎭 **Fully themeable** with Material 3 integration
-- 🖼️ **Image candidate helpers** for selection and display
-- 💾 **Built-in caching** for faster loading
-- 👆 **Tap handling** with URL launching or custom callbacks
-- 🚧 **Loading skeleton placeholders** with shimmer effects
-- 🧩 **Highly customizable components**
-- 📱 **RTL support** using Flutter's logical directional properties
+Link previews are part of an application's visual language. Chat messages,
+article lists, bookmarks, search results, and social feeds need different
+layouts, interaction rules, loading states, accessibility behavior, and image
+policies. A generic card package either becomes too opinionated or accumulates
+configuration that applications still need to work around.
 
-## 📸 Screenshots
+The non-visual conveniences in this package also became redundant as MetaLink
+evolved:
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/metalink_flutter/refs/heads/main/screenshots/1.png" width="40%" alt="Card Style">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/metalink_flutter/refs/heads/main/screenshots/2.png" width="40%" alt="Compact Style">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/metalink_flutter/refs/heads/main/screenshots/3.png" width="40%" alt="Large Style">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/metalink_flutter/refs/heads/main/screenshots/4.png" width="40%" alt="Large Style">
-</p>
+- MetaLink owns request orchestration, caching, concurrent-request coalescing,
+  batch extraction, lifecycle, and diagnostics.
+- Flutter applications already have established choices for state management,
+  image loading, navigation, persistence, and design systems.
+- Keeping another controller and cache layer between the application and
+  MetaLink hides structured partial results and makes engine upgrades slower.
+- URL detection and card styling are application concerns rather than metadata
+  extraction capabilities.
 
+This is a product-boundary decision, not a replacement of Flutter support.
+`package:metalink` continues to work in Flutter applications. Only the
+prebuilt UI package is being retired.
 
-## 🚀 Getting Started
+## What happens to existing applications?
 
-### Installation
+- Published versions remain available from pub.dev.
+- The `2.0.3` release keeps the existing public API intact for compatibility.
+- The source repository is archived as a read-only historical reference.
+- No security, compatibility, or Flutter-version updates are planned for this
+  package after `2.0.3`.
+- MetaLink engine updates continue in the
+  [`metalink`](https://github.com/omar-hanafy/metalink) repository.
 
-Add the package to your pubspec.yaml:
+Applications do not need to migrate immediately, but should avoid introducing
+new dependencies on `metalink_flutter`.
+
+## Migration
+
+### 1. Replace the dependency
 
 ```yaml
 dependencies:
-  metalink_flutter: ^<LATEST VERSION>
+  metalink: ^2.1.0
 ```
 
-Run the installation command:
+Remove `metalink_flutter` and add any UI dependencies your application actually
+uses.
 
-```bash
-flutter pub get
-```
+MetaLink 2.1 requires Dart 3.11. Applications on an older Dart toolchain can
+first replace the Flutter widgets while staying on a compatible MetaLink 2.0.x
+release, then upgrade the engine and SDK separately.
 
-### Basic Usage
+### 2. Extract metadata directly
 
-Import the package:
+For a small widget or one-off request, keep the extraction future in state:
 
 ```dart
-import 'package:metalink_flutter/metalink_flutter.dart';
-```
+import 'package:flutter/material.dart';
+import 'package:metalink/metalink.dart';
 
-Add a simple link preview widget:
+class LinkPreview extends StatefulWidget {
+  const LinkPreview({required this.url, super.key});
 
-```dart
-LinkPreview(
-  url: 'https://flutter.dev',
-)
-```
+  final String url;
 
-That's it! The widget will automatically fetch metadata and display a card-style preview of the link.
+  @override
+  State<LinkPreview> createState() => _LinkPreviewState();
+}
 
-## 🎨 Link Preview Styles
+class _LinkPreviewState extends State<LinkPreview> {
+  late Future<ExtractionResult<LinkMetadata>> _result;
 
-MetaLink Flutter comes with three built-in styles and the ability to create custom styles.
-
-### Card Style (Default)
-
-Displays a card with the link's image on top, and title, description, and site information below.
-
-```dart
-LinkPreview.card(
-  url: 'https://flutter.dev',
-  titleMaxLines: 2,
-  descriptionMaxLines: 3,
-)
-```
-
-### Compact Style
-
-A horizontal layout suitable for inline previews in chat interfaces or lists.
-
-```dart
-LinkPreview.compact(
-  url: 'https://flutter.dev',
-  titleMaxLines: 1,
-  descriptionMaxLines: 1,
-)
-```
-
-### Large Style
-
-A prominent display with a large image and detailed content, suitable for featured links.
-
-```dart
-LinkPreview.large(
-  url: 'https://flutter.dev',
-  titleMaxLines: 2,
-  descriptionMaxLines: 4,
-)
-```
-
-### Custom Style
-
-Create your own unique link preview style:
-
-```dart
-LinkPreview.custom(
-  url: 'https://flutter.dev',
-  builder: (context, data) {
-    return Card(
-      child: Column(
-        children: [
-          if (data.hasImage) 
-            Image.network(data.imageUrl!),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.title ?? 'No Title',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                if (data.description != null)
-                  Text(data.description!),
-                Text(data.hostname, style: TextStyle(color: Colors.blue)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  },
-)
-```
-
-## 🔧 Advanced Configuration
-
-### Configuration Options
-
-The `LinkPreview` widget accepts a `config` parameter for customizing its behavior:
-
-```dart
-LinkPreview(
-  url: 'https://flutter.dev',
-  config: LinkPreviewConfig(
-    style: LinkPreviewStyle.card,
-    titleMaxLines: 2,
-    descriptionMaxLines: 3,
-    showImage: true,
-    showFavicon: true,
-    handleNavigation: true,
-    animateLoading: true,
-    cacheDuration: Duration(hours: 24),
-  ),
-  onTap: (data) {
-    print('Link tapped!');
-  },
-)
-```
-
-### Error and Loading Handling
-
-Customize the appearance of loading and error states:
-
-```dart
-LinkPreview(
-  url: 'https://flutter.dev',
-  errorBuilder: (context, error) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.red),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text('Failed to load preview: $error'),
-    );
-  },
-  loadingBuilder: (context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Row(
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(width: 16),
-          Text('Loading preview...'),
-        ],
-      ),
-    );
-  },
-)
-```
-
-## 🎮 Using Controllers
-
-The `LinkPreviewController` allows you to programmatically control link previews:
-
-```dart
-class _MyWidgetState extends State<MyWidget> {
-  late LinkPreviewController _controller;
-  
   @override
   void initState() {
     super.initState();
-    _controller = LinkPreviewController();
+    _result = MetaLink.extract(widget.url);
   }
-  
+
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void didUpdateWidget(LinkPreview oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _result = MetaLink.extract(widget.url);
+    }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          decoration: InputDecoration(labelText: 'Enter URL'),
-          onSubmitted: (url) {
-            _controller.setUrl(url);
-          },
-        ),
-        SizedBox(height: 16),
-        LinkPreview(
-          url: '', // Will be set by controller
-          controller: _controller,
-        ),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () => _controller.fetchData(forceRefresh: true),
-              child: Text('Refresh'),
-            ),
-            SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: () => _controller.clear(),
-              child: Text('Clear'),
-            ),
-          ],
-        ),
-      ],
+    return FutureBuilder<ExtractionResult<LinkMetadata>>(
+      future: _result,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox(
+            height: 120,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final result = snapshot.requireData;
+        final metadata = result.metadataOrNull;
+        if (metadata == null) {
+          return Text(result.primaryError?.message ?? 'Preview unavailable');
+        }
+
+        final image = metadata.images.firstOrNull;
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          child: Row(
+            children: [
+              if (image != null)
+                Image.network(
+                  image.url.toString(),
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const SizedBox(width: 120),
+                ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        metadata.title ?? metadata.resolvedUrl.host,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      if (metadata.description case final description?) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
 ```
 
-## 🎭 Theming
+`images` and `icons` are already ordered by MetaLink's ranking policy. Your UI
+can choose a different candidate when its dimensions, MIME type, or aspect ratio
+better match the layout.
 
-### Adding Theme Extension
-
-MetaLink Flutter integrates with your app's theme system using Theme Extensions:
+### 3. Use a reusable client when the screen performs multiple requests
 
 ```dart
-final myTheme = ThemeData.light().copyWith(
-  extensions: [
-    LinkPreviewTheme(
-      data: LinkPreviewThemeData(
-        backgroundColor: Colors.grey[100],
-        titleStyle: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.indigo,
-        ),
-        descriptionStyle: TextStyle(
-          fontSize: 14,
-          color: Colors.black87,
-        ),
-        urlStyle: TextStyle(
-          fontSize: 12,
-          color: Colors.blue,
-        ),
-        borderRadius: BorderRadius.circular(12),
-        elevation: 2.0,
-        imageHeight: 150.0,
-        faviconSize: 16.0,
-        cardShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
-        ),
-      ),
+final client = MetaLinkClient(
+  options: MetaLinkClientOptions(
+    fetch: FetchOptions(
+      timeout: Duration(seconds: 10),
+      totalTimeout: Duration(seconds: 20),
+      requestPolicy: RequestPolicy.secure(),
     ),
-  ],
-);
-
-// Apply the theme
-MaterialApp(
-  theme: myTheme,
-  // ...
-)
-```
-
-### Theme Extension Method
-
-You can also use the extension method on `ThemeData`:
-
-```dart
-final myTheme = ThemeData.light().withLinkPreviewTheme(
-  LinkPreviewThemeData(
-    backgroundColor: Colors.grey[100],
-    titleStyle: TextStyle(fontWeight: FontWeight.bold),
-    borderRadius: BorderRadius.circular(12),
-    // ...other properties
+    cache: const CacheOptions(
+      enabled: true,
+      ttl: Duration(minutes: 30),
+    ),
   ),
 );
-```
 
-## 🔍 URL Detection
-
-Automatically detect URLs in text:
-
-```dart
-final text = "Check out this cool site: https://flutter.dev and this one www.example.com";
-final urls = UrlDetector.detectUrls(text);
-
-for (final match in urls) {
-  print('URL: ${match.url}, Position: ${match.start}-${match.end}');
-  
-  // Create a preview for each detected URL
-  LinkPreview.compact(url: match.url);
+try {
+  final result = await client.extract('https://dart.dev');
+  final metadata = result.metadataOrNull;
+  // Pass metadata to your own widget or state layer.
+} finally {
+  await client.dispose();
 }
 ```
 
-## 📦 MetadataProvider
+Keep a long-lived client in your repository, service, provider, BLoC, Riverpod
+provider, or other application state layer. MetaLink does not require any one
+Flutter state-management package.
 
-The `MetadataProvider` class handles caching and fetching metadata:
+### 4. Handle partial and failed results explicitly
 
 ```dart
-// Create a provider with caching enabled
-final provider = await MetadataProvider.createWithCache(
-  cacheDuration: Duration(hours: 24),
-);
-
-// Get metadata for a URL
-final metadata = await provider.getMetadata('https://flutter.dev');
-
-// Get metadata for multiple URLs in parallel
-final metadataList = await provider.getMultipleMetadata([
-  'https://flutter.dev',
-  'https://pub.dev',
-  'https://material.io',
-]);
-
-// Clear the memory cache
-provider.clearMemoryCache();
-
-// Clear the storage cache
-await MetadataProvider.clearStorageCache();
+switch (result.status) {
+  case ExtractionStatus.success:
+    showPreview(result.metadata);
+  case ExtractionStatus.partial:
+    showPreview(result.metadata, isPartial: true);
+  case ExtractionStatus.failure:
+    showError(
+      result.primaryError?.message ?? 'Preview unavailable',
+      canRetry: result.retryable,
+    );
+}
 ```
 
-## Web Platform Limitations
+This preserves information that the old `MetadataProvider` converted into a
+single loading/data/error model.
 
-When using this package in Flutter Web, browser security policies,
-specifically Cross-Origin Resource Sharing ([CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)), restrict direct HTTP requests to external domains.
-To work around this limitation, consider the following options:
+## API migration map
 
-- **If you control the server**: Enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) by configuring the server to include appropriate response headers (e.g., `Access-Control-Allow-Origin: *` or your app’s domain). This allows the browser to permit requests from your Flutter Web app.
-- **Alternative**: Set up your server to act as a proxy. Make a direct request from your Flutter Web app to your server, which then fetches the metadata from the external domain and returns it to your app. This bypasses [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) restrictions entirely, as the request originates server-side.
+| `metalink_flutter` API | Migration |
+| --- | --- |
+| `LinkPreview`, `LinkPreviewCard`, `LinkPreviewCompact`, `LinkPreviewLarge` | Build an application widget from `LinkMetadata`. |
+| `LinkPreviewBuilder` | Use `FutureBuilder`, your state-management solution, or a repository abstraction. |
+| `LinkPreviewController` | Store `ExtractionResult<LinkMetadata>` in application state. |
+| `MetadataProvider` | Use a long-lived `MetaLinkClient`. |
+| `MetadataFlutterCacheFactory` | Use MetaLink's memory cache or initialize an application-owned `HiveCacheStore`. |
+| `LinkPreviewTheme` | Use your application's `ThemeData`, component theme, or design tokens. |
+| `ImageResolver` | Select from ranked `metadata.images`; apply your own CDN or image provider. |
+| `UrlDetector` | Keep URL detection in the text-input/domain layer or use a dedicated parser. |
+| `launchUrlFromContext` | Call `url_launcher` directly where navigation is owned. |
 
-## 📄 API Documentation
+## Flutter showcase
 
-### Main Classes
+The MetaLink repository includes a complete, custom Flutter implementation:
 
-- `LinkPreview` - The main widget for displaying link previews
-- `LinkPreviewController` - Controls the state of link previews
-- `MetadataProvider` - Handles caching and fetching metadata
-- `LinkPreviewTheme` - Theme extension for customizing appearance
-- `UrlDetector` - Utility for finding and analyzing URLs in text
-- `ImageResolver` - Utility for selecting image candidates
+[`examples/flutter_link_preview`](https://github.com/omar-hanafy/metalink/tree/main/examples/flutter_link_preview)
 
-For complete API documentation, please see the [API reference](https://pub.dev/documentation/metalink_flutter/latest/).
+It demonstrates a responsive card, loading and failure states, ranked images,
+diagnostics, caching, cancellation, and deterministic client disposal without
+depending on `metalink_flutter`. It is intentionally example code, so teams can
+adapt its styling and ownership model instead of inheriting another package's
+UI contract.
 
-## 🙋 FAQ
+## Flutter web
 
-**Q: Does this work with any URL?**  
-A: Yes, the package attempts to extract metadata from any valid URL.
-The quality of the preview depends on the metadata available on the target website.
+Browsers commonly prevent direct metadata extraction from third-party sites
+through CORS and do not expose every redirect hop. For untrusted browser-side
+URLs, use a policy-aware backend proxy or provide a custom MetaLink `Fetcher`
+that can enforce the required network policy. The showcase targets native
+Flutter platforms for that reason.
 
-**Q: Why do I get errors when fetching metadata on Flutter Web?**  
-A: On Flutter Web, browser CORS restrictions prevent direct requests to external domains. To resolve this, either enable
-CORS on the target server (if you control it) by adding headers like `Access-Control-Allow-Origin`, or use a proxy
-server to fetch the metadata and relay it to your app. See "Web Platform Limitations" for details.
+## Historical documentation
 
-**Q: How is caching handled?**  
-A: The package caches metadata in memory and optionally on disk using `hive_ce`. You can configure the cache duration
-and clear the cache programmatically.
+The final source remains available in this repository for existing users who
+need to inspect or temporarily maintain the old widgets. Earlier usage examples
+remain available through the README attached to previous tags.
 
-**Q: Does it resize or optimize images?**  
-A: In v2, MetaLink does not provide image resizing. The Flutter widgets use the original image URLs. If you need resizing,
-use an image proxy or CDN.
+For active documentation and support, use:
 
-**Q: Does it support RTL languages?**  
-A: Yes, the package uses Flutter's logical directional properties (`start`/`end` instead of `left`/`right`) for proper
-RTL support.
+- [MetaLink on pub.dev](https://pub.dev/packages/metalink)
+- [MetaLink repository](https://github.com/omar-hanafy/metalink)
+- [MetaLink issue tracker](https://github.com/omar-hanafy/metalink/issues)
 
-**Q: Can I customize the loading animation?**  
-A: Yes, you can provide your own loading widget using the `loadingBuilder` parameter.
+## License
 
-## 👨‍💻 Contributing
-
-Contributions are welcome!
-If you find a bug or want a feature, please open an issue.
-If you want to contribute code, please fork the repository and submit a pull request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MetaLink Flutter remains available under the BSD 3-Clause License.

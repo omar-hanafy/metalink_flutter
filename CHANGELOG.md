@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.3
+
+- Discontinued `metalink_flutter` in favor of using `package:metalink` directly with application-owned Flutter widgets.
+- Added a migration guide linked to the complete Flutter showcase for replacing the package's cards, controller, provider, and cache helpers.
+- Preserved the existing runtime API in this final compatibility release so current applications can migrate on their own schedule.
+
 ## 2.0.2
 
 - Removed the `flutter_helper_utils` dependency; the package now relies only on native Flutter APIs, reducing its dependency footprint.
