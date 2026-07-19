@@ -285,6 +285,10 @@ class MetadataProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    // MetaLink 2.0 does not expose the asynchronous disposal API. Keep this
+    // compatibility call in the final package release so applications can use
+    // either MetaLink 2.0 or 2.1 while they migrate away from this provider.
+    // ignore: deprecated_member_use
     _client.close();
     if (_ownsCacheStore && _cacheStore != null) {
       unawaited(_cacheStore!.close());
